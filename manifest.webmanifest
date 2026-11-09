@@ -1,0 +1,23 @@
+{
+  "id": "khairat-al-janneh-jordan",
+  "name": "خيرات الجنة",
+  "short_name": "خيرات الجنة",
+  "description": "تسوّق خيرات البيت وتابع توفر المنتجات من أقرب فرع.",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#fffefb",
+  "theme_color": "#0d3c2a",
+  "categories": ["shopping", "food"],
+  "icons": [
+    { "src": "assets/app-icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "assets/app-icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ],
+  "shortcuts": [
+    { "name": "الأسعار المنشورة", "short_name": "الأسعار", "url": "./offers/", "icons": [{ "src": "assets/app-icon-192.png", "sizes": "192x192" }] },
+    { "name": "إدارة المخزون", "short_name": "الإدارة", "url": "./admin/", "icons": [{ "src": "assets/app-icon-192.png", "sizes": "192x192" }] }
+  ]
+}

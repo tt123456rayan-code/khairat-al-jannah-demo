@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+    <meta name="theme-color" content="#0d3c2a" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>إدارة المخزون | خيرات الجنة</title>
+    <link rel="icon" href="assets/app-icon-192.png" />
+    <link rel="stylesheet" href="admin.css" />
+  </head>
+  <body>
+    <svg class="svg-sprite" aria-hidden="true">
+      <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></symbol>
+      <symbol id="i-box" viewBox="0 0 24 24"><path d="m4 7 8-4 8 4-8 4-8-4Z"/><path d="m4 7 8 4 8-4v10l-8 4-8-4V7Z"/><path d="M12 11v10"/></symbol>
+      <symbol id="i-count" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13"/><path d="m3 6 1 1 2-2M3 12l1 1 2-2M3 18l1 1 2-2"/></symbol>
+      <symbol id="i-waste" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 15H6L5 6M10 10v7M14 10v7"/></symbol>
+      <symbol id="i-audit" viewBox="0 0 24 24"><path d="M9 3h6l1 2h3v16H5V5h3l1-2Z"/><path d="m9 13 2 2 4-5"/></symbol>
+      <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></symbol>
+      <symbol id="i-scan" viewBox="0 0 24 24"><path d="M3 8V4h4M17 4h4v4M21 16v4h-4M7 20H3v-4M7 8v8M10 8v8M14 8v8M17 8v8"/></symbol>
+      <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+      <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 4 6v5c0 5 3.4 8.4 8 10 4.6-1.6 8-5 8-10V6l-8-3Z"/><path d="m8.5 12 2.2 2.2 4.8-5"/></symbol>
+      <symbol id="i-tag" viewBox="0 0 24 24"><path d="M20 13 11 22l-9-9V4h9l9 9Z"/><circle cx="7" cy="9" r="1.5"/></symbol>
+      <symbol id="i-arrow" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol>
+      <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+    </svg>
+
+    <aside class="admin-sidebar">
+      <a class="admin-brand" href="index.html"><img src="assets/khairat-logo-web.png" alt="خيرات الجنة" /><span>نظام إدارة العمليات<small>فرع شارع مكة</small></span></a>
+      <div class="admin-identity"><span>لم</span><div><strong>ليان محمد</strong><small>مديرة الفرع</small></div></div>
+      <nav class="admin-nav" aria-label="أقسام الإدارة">
+        <button class="is-active" data-view="overview"><svg><use href="#i-grid"/></svg><span>نظرة عامة</span></button>
+        <button data-view="inventory"><svg><use href="#i-box"/></svg><span>المخزون</span><b id="lowBadge">0</b></button>
+        <button data-view="counts"><svg><use href="#i-count"/></svg><span>طلبات العدّ</span><b id="countBadge">0</b></button>
+        <button data-view="waste"><svg><use href="#i-waste"/></svg><span>التوالف</span><b id="wasteBadge">0</b></button>
+        <button data-view="audit"><svg><use href="#i-audit"/></svg><span>سجل التدقيق</span></button>
+        <button data-view="admins"><svg><use href="#i-shield"/></svg><span>مديرو الشركة</span></button>
+      </nav>
+      <div class="sidebar-security"><svg><use href="#i-shield"/></svg><strong>لا تعديل مباشر للكميات</strong><small>كل حركة مسجلة وتتطلب اعتماداً.</small></div>
+      <a class="back-store" href="index.html"><svg><use href="#i-arrow"/></svg> الرجوع للمتجر</a>
+    </aside>
+
+    <main class="admin-main">
+      <header class="admin-topbar">
+        <div><span class="eyebrow">لوحة تشغيل المستودع</span><h1 id="pageTitle">صباح الخير، ليان</h1></div>
+        <div class="topbar-actions"><span class="live-status"><i></i> عرض محلي تجريبي</span><button class="button button--ghost" data-open-waste><svg><use href="#i-waste"/></svg> تسجيل تالف</button><button class="button button--primary" data-open-count><svg><use href="#i-count"/></svg> عدّ جديد</button></div>
+      </header>
+
+      <section class="admin-view is-active" data-panel="overview">
+        <div class="status-note"><svg><use href="#i-shield"/></svg><div><strong>مسار رقابي للمعاينة</strong><span>العدّ والتالف يمران بمراجعة داخل هذا الديمو. التشغيل الفعلي يحتاج حسابات وصلاحيات وخادماً.</span></div><button data-view="audit">فتح السجل</button></div>
+        <div class="metric-grid" id="metricGrid"></div>
+        <section class="directors-overview" aria-labelledby="directorsOverviewTitle"><div><span class="eyebrow">إدارة الشركة</span><h2 id="directorsOverviewTitle">مديرو الشركة</h2><p>تعريف الأدوار المعتمدة في تصميم النظام.</p></div><div class="director-mini"><span>خ</span><strong>خالد عبد الفتاح عقل</strong></div><div class="director-mini"><span>ج</span><strong>جمال عبد الفتاح عقل</strong></div><button class="text-button" data-view="admins">عرض التفاصيل ←</button></section>
+        <div class="dashboard-grid">
+          <article class="panel panel--wide"><div class="panel-head"><div><span class="eyebrow">يتطلب إجراء</span><h2>أصناف بحاجة للانتباه</h2></div><button class="text-button" data-view="inventory">عرض المخزون</button></div><div id="attentionList" class="attention-list"></div></article>
+          <article class="panel"><div class="panel-head"><div><span class="eyebrow">آخر النشاط</span><h2>الحركات الأخيرة</h2></div></div><div id="recentMovements" class="movement-list"></div></article>
+        </div>
+        <div class="control-grid">
+          <article><span class="control-icon"><svg><use href="#i-count"/></svg></span><strong>عدّ أعمى</strong><p>الموظف لا يرى كمية النظام قبل أن يثبت العدّ الفعلي.</p></article>
+          <article><span class="control-icon"><svg><use href="#i-shield"/></svg></span><strong>اعتماد مزدوج</strong><p>من يسجل الحركة لا يستطيع اعتمادها بنفسه في النسخة الإنتاجية.</p></article>
+          <article><span class="control-icon"><svg><use href="#i-scan"/></svg></span><strong>باركود وQR</strong><p>امسح ملصق الرف أو الصنف لتقليل أخطاء اختيار المنتج.</p></article>
+          <article><span class="control-icon"><svg><use href="#i-audit"/></svg></span><strong>سجل غير قابل للحذف</strong><p>يحفظ المستخدم والجهاز والوقت والكمية قبل وبعد كل حركة.</p></article>
+        </div>
+      </section>
+
+      <section class="admin-view" data-panel="inventory">
+        <div class="view-heading"><div><span class="eyebrow">المتوفر والمحجوز</span><h2>إدارة المخزون</h2><p>الكميات تتغير فقط من الاستلام، البيع، العدّ المعتمد أو التالف المعتمد.</p></div><button class="button button--primary" data-open-count><svg><use href="#i-count"/></svg> بدء عدّ أعمى</button></div>
+        <div class="inventory-tools">
+          <label class="tool-search"><svg><use href="#i-search"/></svg><input id="inventorySearch" type="search" placeholder="ابحث بالاسم أو SKU أو الباركود" /></label>
+          <label class="tool-scan"><svg><use href="#i-scan"/></svg><input id="barcodeInput" inputmode="numeric" placeholder="امسح الباركود ثم Enter" /></label>
+          <select id="stockFilter" aria-label="فلترة حالة المخزون"><option value="all">كل الحالات</option><option value="low">منخفض</option><option value="healthy">جيد</option><option value="out">نافد</option></select>
+        </div>
+        <div class="table-wrap"><table><thead><tr><th>الصنف</th><th>الموقع</th><th>كمية النظام</th><th>محجوز</th><th>متاح</th><th>الحد الأدنى</th><th>السعر</th><th>الحالة</th><th></th></tr></thead><tbody id="inventoryRows"></tbody></table></div>
+        <div id="inventoryCards" class="inventory-cards"></div>
+      </section>
+
+      <section class="admin-view" data-panel="counts">
+        <div class="view-heading"><div><span class="eyebrow">منع التلاعب</span><h2>طلبات العدّ الأعمى</h2><p>لا تظهر كمية النظام للموظف إلا بعد إرسال العدّ للمراجعة.</p></div><button class="button button--primary" data-open-count><svg><use href="#i-plus"/></svg> طلب عدّ</button></div>
+        <div class="workflow-strip"><span><b>1</b>مسح الصنف</span><i></i><span><b>2</b>إدخال العدّ</span><i></i><span><b>3</b>مراجعة الفرق</span><i></i><span><b>4</b>اعتماد المدير</span></div>
+        <div id="pendingCounts" class="approval-list"></div>
+      </section>
+
+      <section class="admin-view" data-panel="waste">
+        <div class="view-heading"><div><span class="eyebrow">التلف والفاقد</span><h2>إدارة التوالف</h2><p>صورة، سبب، صندوق حجر، ثم اعتماد قبل خصم الكمية.</p></div><button class="button button--primary" data-open-waste><svg><use href="#i-plus"/></svg> تسجيل تالف</button></div>
+        <div class="waste-kpis" id="wasteKpis"></div>
+        <div id="pendingWaste" class="approval-list"></div>
+      </section>
+
+      <section class="admin-view" data-panel="audit">
+        <div class="view-heading"><div><span class="eyebrow">شفافية كاملة</span><h2>سجل التدقيق</h2><p>تسلسل زمني لكل حركة مع الكمية قبل وبعد وهوية المنفذ والمعتمد.</p></div><button class="button button--ghost" id="exportAudit"><svg><use href="#i-audit"/></svg> تصدير CSV</button></div>
+        <div class="audit-list" id="auditList"></div>
+      </section>
+
+      <section class="admin-view" data-panel="admins">
+        <div class="view-heading"><div><span class="eyebrow">إدارة الشركة</span><h2>مديرو الشركة</h2><p>الأسماء والأدوار المعروضة هنا ضمن نموذج الواجهة.</p></div></div>
+        <div class="admin-roster"><article class="admin-person"><div class="admin-person__top"><span class="admin-avatar">خ</span><span class="admin-role">مدير الشركة</span></div><h3>خالد عبد الفتاح عقل</h3><p>حساب إداري مقترح للإشراف على الفروع والمخزون والتقارير.</p><div class="admin-permissions"><span>مراجعة الفروع</span><span>اعتماد التسويات</span><span>التقارير</span></div></article><article class="admin-person"><div class="admin-person__top"><span class="admin-avatar">ج</span><span class="admin-role">مدير الشركة</span></div><h3>جمال عبد الفتاح عقل</h3><p>حساب إداري مقترح للإشراف على الفروع والمخزون والتقارير.</p><div class="admin-permissions"><span>مراجعة الفروع</span><span>اعتماد التسويات</span><span>التقارير</span></div></article></div>
+        <div class="admin-account-note"><svg><use href="#i-shield"/></svg><div><strong>هذه بطاقات عرض، وليست حسابات دخول مفعّلة.</strong><p>قبل الاستخدام الفعلي يجب إنشاء هويتين منفصلتين، تحقق دخول آمن، صلاحيات على الخادم، وسجل اعتماد يربط كل إجراء بصاحبه.</p></div></div>
+      </section>
+    </main>
+
+    <nav class="admin-mobile-nav" aria-label="أقسام الإدارة على الهاتف">
+      <button class="is-active" data-view="overview"><svg><use href="#i-grid"/></svg><span>الرئيسية</span></button>
+      <button data-view="inventory"><svg><use href="#i-box"/></svg><span>المخزون</span></button>
+      <button data-view="counts"><svg><use href="#i-count"/></svg><span>العدّ</span></button>
+      <button data-view="waste"><svg><use href="#i-waste"/></svg><span>التالف</span></button>
+      <button data-view="admins"><svg><use href="#i-shield"/></svg><span>المديرون</span></button>
+    </nav>
+
+    <div class="admin-overlay" id="adminOverlay" hidden></div>
+
+    <div class="admin-modal" id="countModal" role="dialog" aria-modal="true" aria-labelledby="countTitle" aria-hidden="true">
+      <button class="modal-close" data-close-modal aria-label="إغلاق"><svg><use href="#i-close"/></svg></button>
+      <span class="modal-icon"><svg><use href="#i-count"/></svg></span><span class="eyebrow">إجراء محمي</span><h2 id="countTitle">عدّ أعمى جديد</h2>
+      <p class="modal-intro">لن تظهر كمية النظام حتى ترسل العدّ. هذا يمنع مطابقة الرقم بدل العدّ الفعلي.</p>
+      <form id="countForm">
+        <label><span>الصنف</span><select id="countItem" required></select></label>
+        <label><span>الكمية المعدودة فعلياً</span><input id="countQty" required type="number" min="0" step="0.01" inputmode="decimal" placeholder="أدخل العدد بدون تخمين" /></label>
+        <label><span>اسم الموظف</span><input id="countEmployee" required value="أحمد — الجرد" /></label>
+        <label><span>صورة الرف أو الميزان <small>اختياري في الديمو</small></span><input id="countPhoto" type="file" accept="image/*" capture="environment" /></label>
+        <label class="full"><span>ملاحظة</span><textarea id="countNote" rows="3" placeholder="رقم الرف، حالة العبوة، أو أي ملاحظة"></textarea></label>
+        <button class="button button--primary full" type="submit">إرسال للمراجعة</button>
+      </form>
+    </div>
+
+    <div class="admin-modal" id="wasteModal" role="dialog" aria-modal="true" aria-labelledby="wasteTitle" aria-hidden="true">
+      <button class="modal-close" data-close-modal aria-label="إغلاق"><svg><use href="#i-close"/></svg></button>
+      <span class="modal-icon"><svg><use href="#i-waste"/></svg></span><span class="eyebrow">توثيق الفاقد</span><h2 id="wasteTitle">تسجيل تالف</h2>
+      <p class="modal-intro">ضع القطعة في صندوق الحجر، التقط صورة، ثم أرسلها لاعتماد المدير.</p>
+      <form id="wasteForm">
+        <label><span>الصنف</span><select id="wasteItem" required></select></label>
+        <label><span>الكمية التالفة</span><input id="wasteQty" required type="number" min="0.01" step="0.01" inputmode="decimal" /></label>
+        <label><span>السبب</span><select id="wasteReason" required><option value="">اختر السبب</option><option>تالف جودة</option><option>انتهاء صلاحية</option><option>كسر أو تسريب</option><option>تلف تبريد</option><option>مرتجع غير صالح</option></select></label>
+        <label><span>اسم الموظف</span><input id="wasteEmployee" required value="سارة — القسم" /></label>
+        <label><span>صورة التالف <small>مطلوبة بالإنتاج</small></span><input id="wastePhoto" type="file" accept="image/*" capture="environment" /></label>
+        <label><span>رقم صندوق الحجر</span><input id="quarantineBin" placeholder="مثال Q-17" /></label>
+        <label class="full"><span>ملاحظة</span><textarea id="wasteNote" rows="3"></textarea></label>
+        <button class="button button--primary full" type="submit">إرسال للاعتماد</button>
+      </form>
+    </div>
+
+    <div class="admin-modal" id="priceModal" role="dialog" aria-modal="true" aria-labelledby="priceTitle" aria-hidden="true">
+      <button class="modal-close" data-close-modal aria-label="إغلاق"><svg><use href="#i-close"/></svg></button>
+      <span class="modal-icon"><svg><use href="#i-tag"/></svg></span><span class="eyebrow">توحيد السعر</span><h2 id="priceTitle">تحديث سعر المنتج</h2>
+      <p class="modal-intro">أرفق رابط المنشور وتاريخه ليظهر السعر في التطبيق كـ«مطابق للإعلان الرسمي».</p>
+      <form id="priceForm">
+        <input id="priceItemId" type="hidden" />
+        <label><span>سعر البيع بالدينار</span><input id="priceValue" required type="number" min="0" step="0.01" /></label>
+        <label><span>تاريخ النشر</span><input id="priceDate" type="date" /></label>
+        <label class="full"><span>رابط الإعلان الرسمي</span><input id="priceSource" type="url" placeholder="https://www.instagram.com/..." /></label>
+        <label class="check-row full"><input id="priceVerified" type="checkbox" /><span>تمت مطابقة السعر يدوياً مع إعلان خيرات الجنة</span></label>
+        <button class="button button--primary full" type="submit">حفظ ونشر في التطبيق</button>
+      </form>
+    </div>
+
+    <div class="admin-toast" id="adminToast" role="status" aria-live="polite"></div>
+    <script src="inventory-store.js"></script>
+    <script src="admin.js"></script>
+  </body>
+</html>

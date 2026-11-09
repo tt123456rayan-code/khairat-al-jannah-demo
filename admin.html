@@ -27,14 +27,14 @@
 
     <aside class="admin-sidebar">
       <a class="admin-brand" href="index.html"><img src="assets/khairat-logo-web.png" alt="خيرات الجنة" /><span>نظام إدارة العمليات<small>فرع شارع مكة</small></span></a>
-      <div class="admin-identity"><span>لم</span><div><strong>ليان محمد</strong><small>مديرة الفرع</small></div></div>
+      <div class="admin-identity"><span>خ</span><div><strong>خالد عقل</strong><small>مدير أفرع</small></div></div>
       <nav class="admin-nav" aria-label="أقسام الإدارة">
         <button class="is-active" data-view="overview"><svg><use href="#i-grid"/></svg><span>نظرة عامة</span></button>
         <button data-view="inventory"><svg><use href="#i-box"/></svg><span>المخزون</span><b id="lowBadge">0</b></button>
         <button data-view="counts"><svg><use href="#i-count"/></svg><span>طلبات العدّ</span><b id="countBadge">0</b></button>
         <button data-view="waste"><svg><use href="#i-waste"/></svg><span>التوالف</span><b id="wasteBadge">0</b></button>
         <button data-view="audit"><svg><use href="#i-audit"/></svg><span>سجل التدقيق</span></button>
-        <button data-view="admins"><svg><use href="#i-shield"/></svg><span>مديرو الشركة</span></button>
+        <button data-view="admins"><svg><use href="#i-shield"/></svg><span>فريق الإدارة</span></button>
       </nav>
       <div class="sidebar-security"><svg><use href="#i-shield"/></svg><strong>لا تعديل مباشر للكميات</strong><small>كل حركة مسجلة وتتطلب اعتماداً.</small></div>
       <a class="back-store" href="index.html"><svg><use href="#i-arrow"/></svg> الرجوع للمتجر</a>
@@ -42,14 +42,14 @@
 
     <main class="admin-main">
       <header class="admin-topbar">
-        <div><span class="eyebrow">لوحة تشغيل المستودع</span><h1 id="pageTitle">صباح الخير، ليان</h1></div>
+        <div><span class="eyebrow">لوحة تشغيل المستودع</span><h1 id="pageTitle">صباح الخير، خالد</h1></div>
         <div class="topbar-actions"><span class="live-status"><i></i> عرض محلي تجريبي</span><button class="button button--ghost" data-open-waste><svg><use href="#i-waste"/></svg> تسجيل تالف</button><button class="button button--primary" data-open-count><svg><use href="#i-count"/></svg> عدّ جديد</button></div>
       </header>
 
       <section class="admin-view is-active" data-panel="overview">
         <div class="status-note"><svg><use href="#i-shield"/></svg><div><strong>مسار رقابي للمعاينة</strong><span>العدّ والتالف يمران بمراجعة داخل هذا الديمو. التشغيل الفعلي يحتاج حسابات وصلاحيات وخادماً.</span></div><button data-view="audit">فتح السجل</button></div>
         <div class="metric-grid" id="metricGrid"></div>
-        <section class="directors-overview" aria-labelledby="directorsOverviewTitle"><div><span class="eyebrow">إدارة الشركة</span><h2 id="directorsOverviewTitle">مديرو الشركة</h2><p>تعريف الأدوار المعتمدة في تصميم النظام.</p></div><div class="director-mini"><span>خ</span><strong>خالد عبد الفتاح عقل</strong></div><div class="director-mini"><span>ج</span><strong>جمال عبد الفتاح عقل</strong></div><button class="text-button" data-view="admins">عرض التفاصيل ←</button></section>
+        <section class="directors-overview" aria-labelledby="directorsOverviewTitle"><div><span class="eyebrow">إدارة الشركة</span><h2 id="directorsOverviewTitle">فريق الإدارة</h2><p>تعريف الأدوار المعتمدة في تصميم النظام.</p></div><div class="director-mini"><span>خ</span><strong>خالد عقل · مدير أفرع</strong></div><div class="director-mini"><span>ج</span><strong>جمال عبد الفتاح عقل</strong></div><button class="text-button" data-view="admins">عرض التفاصيل ←</button></section>
         <div class="dashboard-grid">
           <article class="panel panel--wide"><div class="panel-head"><div><span class="eyebrow">يتطلب إجراء</span><h2>أصناف بحاجة للانتباه</h2></div><button class="text-button" data-view="inventory">عرض المخزون</button></div><div id="attentionList" class="attention-list"></div></article>
           <article class="panel"><div class="panel-head"><div><span class="eyebrow">آخر النشاط</span><h2>الحركات الأخيرة</h2></div></div><div id="recentMovements" class="movement-list"></div></article>
@@ -91,8 +91,8 @@
       </section>
 
       <section class="admin-view" data-panel="admins">
-        <div class="view-heading"><div><span class="eyebrow">إدارة الشركة</span><h2>مديرو الشركة</h2><p>الأسماء والأدوار المعروضة هنا ضمن نموذج الواجهة.</p></div></div>
-        <div class="admin-roster"><article class="admin-person"><div class="admin-person__top"><span class="admin-avatar">خ</span><span class="admin-role">مدير الشركة</span></div><h3>خالد عبد الفتاح عقل</h3><p>حساب إداري مقترح للإشراف على الفروع والمخزون والتقارير.</p><div class="admin-permissions"><span>مراجعة الفروع</span><span>اعتماد التسويات</span><span>التقارير</span></div></article><article class="admin-person"><div class="admin-person__top"><span class="admin-avatar">ج</span><span class="admin-role">مدير الشركة</span></div><h3>جمال عبد الفتاح عقل</h3><p>حساب إداري مقترح للإشراف على الفروع والمخزون والتقارير.</p><div class="admin-permissions"><span>مراجعة الفروع</span><span>اعتماد التسويات</span><span>التقارير</span></div></article></div>
+        <div class="view-heading"><div><span class="eyebrow">إدارة الشركة</span><h2>فريق الإدارة</h2><p>الأسماء والأدوار المعروضة هنا ضمن نموذج الواجهة.</p></div></div>
+        <div class="admin-roster"><article class="admin-person"><div class="admin-person__top"><span class="admin-avatar">خ</span><span class="admin-role">مدير أفرع</span></div><h3>خالد عقل</h3><p>حساب إداري مقترح للإشراف على الفروع والمخزون والتقارير.</p><div class="admin-permissions"><span>مراجعة الفروع</span><span>اعتماد التسويات</span><span>التقارير</span></div></article><article class="admin-person"><div class="admin-person__top"><span class="admin-avatar">ج</span><span class="admin-role">مدير الشركة</span></div><h3>جمال عبد الفتاح عقل</h3><p>حساب إداري مقترح للإشراف على الفروع والمخزون والتقارير.</p><div class="admin-permissions"><span>مراجعة الفروع</span><span>اعتماد التسويات</span><span>التقارير</span></div></article></div>
         <div class="admin-account-note"><svg><use href="#i-shield"/></svg><div><strong>هذه بطاقات عرض، وليست حسابات دخول مفعّلة.</strong><p>قبل الاستخدام الفعلي يجب إنشاء هويتين منفصلتين، تحقق دخول آمن، صلاحيات على الخادم، وسجل اعتماد يربط كل إجراء بصاحبه.</p></div></div>
       </section>
     </main>

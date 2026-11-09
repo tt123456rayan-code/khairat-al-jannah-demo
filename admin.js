@@ -1,8 +1,8 @@
 const $ = (selector, scope = document) => scope.querySelector(selector);
 const $$ = (selector, scope = document) => [...scope.querySelectorAll(selector)];
 const store = window.KhairatInventory;
-const supervisor = "ليان — مديرة الفرع";
-const viewTitles = { overview: "صباح الخير، ليان", inventory: "إدارة المخزون", counts: "طلبات العدّ", waste: "التوالف والفاقد", audit: "سجل التدقيق", admins: "مديرو الشركة" };
+const supervisor = "خالد عقل — مدير أفرع";
+const viewTitles = { overview: "صباح الخير، خالد", inventory: "إدارة المخزون", counts: "طلبات العدّ", waste: "التوالف والفاقد", audit: "سجل التدقيق", admins: "فريق الإدارة" };
 let toastTimer;
 let modalReturnFocus;
 

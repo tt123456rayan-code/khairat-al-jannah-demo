@@ -18,9 +18,9 @@
   ];
 
   const seedMovements = [
-    { id: "MV-1001", type: "receipt", itemId: 6, qty: 24, beforeQty: 4, afterQty: 28, employee: "محمود — الاستلام", status: "approved", approvedBy: "ليان — مديرة الفرع", createdAt: "2026-11-07T07:35:00+03:00", note: "استلام أمر شراء PO-841" },
-    { id: "MV-1002", type: "waste", itemId: 4, qty: 2, beforeQty: 26, afterQty: 24, employee: "سارة — الألبان", status: "approved", approvedBy: "ليان — مديرة الفرع", createdAt: "2026-11-07T09:20:00+03:00", reason: "تلف تبريد", note: "عبوتان منتفختان — صورة مرفقة" },
-    { id: "MV-1003", type: "count", itemId: 8, countedQty: 13, variance: -1, beforeQty: 14, afterQty: 13, employee: "أحمد — الجرد", status: "approved", approvedBy: "ليان — مديرة الفرع", createdAt: "2026-11-07T10:05:00+03:00", note: "عدّ أعمى وإعادة تحقق" },
+    { id: "MV-1001", type: "receipt", itemId: 6, qty: 24, beforeQty: 4, afterQty: 28, employee: "محمود — الاستلام", status: "approved", approvedBy: "خالد عقل — مدير أفرع", createdAt: "2026-11-07T07:35:00+03:00", note: "استلام أمر شراء PO-841" },
+    { id: "MV-1002", type: "waste", itemId: 4, qty: 2, beforeQty: 26, afterQty: 24, employee: "سارة — الألبان", status: "approved", approvedBy: "خالد عقل — مدير أفرع", createdAt: "2026-11-07T09:20:00+03:00", reason: "تلف تبريد", note: "عبوتان منتفختان — صورة مرفقة" },
+    { id: "MV-1003", type: "count", itemId: 8, countedQty: 13, variance: -1, beforeQty: 14, afterQty: 13, employee: "أحمد — الجرد", status: "approved", approvedBy: "خالد عقل — مدير أفرع", createdAt: "2026-11-07T10:05:00+03:00", note: "عدّ أعمى وإعادة تحقق" },
     { id: "MV-1004", type: "waste", itemId: 1, qty: 3, beforeQty: 38, afterQty: null, employee: "سارة — الخضار", status: "pending", createdAt: "2026-11-07T11:15:00+03:00", reason: "تالف جودة", note: "طراوة زائدة — صندوق الحجر Q-17" }
   ];
 
@@ -52,7 +52,10 @@
   function save(items) { return write(INVENTORY_KEY, items); }
   function movements() {
     let rows = read(MOVEMENTS_KEY, seedMovements);
-    if (!localStorage.getItem(MOVEMENTS_KEY)) rows = write(MOVEMENTS_KEY, rows);
+    const legacySeedIds = new Set(["MV-1001", "MV-1002", "MV-1003"]);
+    const needsMigration = rows.some((row) => legacySeedIds.has(row.id) && row.approvedBy !== "خالد عقل — مدير أفرع");
+    if (needsMigration) rows = rows.map((row) => legacySeedIds.has(row.id) ? { ...row, approvedBy: "خالد عقل — مدير أفرع" } : row);
+    if (!localStorage.getItem(MOVEMENTS_KEY) || needsMigration) rows = write(MOVEMENTS_KEY, rows);
     return clone(rows);
   }
 

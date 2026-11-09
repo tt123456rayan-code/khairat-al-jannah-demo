@@ -190,10 +190,14 @@ function currentPage() {
   return simplePage(route);
 }
 let revealObserver;
+let initialRevealComplete = false;
 function render() {
   document.querySelector("#app").innerHTML = header() + currentPage() + footer() + '<div class="toast" role="status" aria-live="polite"></div>';
   bindPage();
-  setupReveal();
+  if (!initialRevealComplete) {
+    setupReveal();
+    initialRevealComplete = true;
+  }
 }
 function toast(message) {
   const element = document.querySelector(".toast");
@@ -264,7 +268,6 @@ function bindPage() {
     if(sort?.value==="price-desc") filtered.sort((a,b)=>b.price-a.price);
     if(sort?.value==="name") filtered.sort((a,b)=>a.name.localeCompare(b.name,"ar"));
     document.querySelector("#listing-grid").innerHTML=grid(filtered);
-    if (document.body.classList.contains("motion-ready")) setupReveal();
     document.querySelector("#listing-grid").hidden=!filtered.length;
     document.querySelector("#no-results").hidden=!!filtered.length;
     document.querySelector(".item-count").textContent=filtered.length+" منتجات";
@@ -299,7 +302,7 @@ render();
 function setupReveal() {
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) return;
   revealObserver?.disconnect();
-  const elements = document.querySelectorAll(".hero-copy, .benefits, .section-head, .category-tile, .editorial-banner, .product-card, .service-cta, .offers-hero, .page-heading, .listing-intro, .product-page, .cart-row, .form-section, .account-grid > a, .branch-grid article, .help-grid article");
+  const elements = document.querySelectorAll(".hero-copy, .benefits, .section-head, .category-grid, .editorial-banner, .product-grid, .service-cta, .offers-hero, .page-heading, .listing-intro, .product-page, .form-section, .account-grid, .branch-grid, .help-grid");
   const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       if (!entry.isIntersecting) return;
@@ -308,9 +311,8 @@ function setupReveal() {
     });
   }, { threshold: 0.08, rootMargin: "0px 0px 30px 0px" });
   revealObserver = observer;
-  elements.forEach((element, index) => {
+  elements.forEach((element) => {
     element.classList.add("reveal");
-    element.style.setProperty("--reveal-delay", Math.min(index % 5, 4) * 55 + "ms");
     observer.observe(element);
   });
   document.body.classList.add("motion-ready");
@@ -319,7 +321,6 @@ function setupReveal() {
 function setupMotion() {
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
   const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-  let activeCard = null;
   if (finePointer) {
     const follower = document.createElement("div");
     follower.className = "cursor-follower";
@@ -330,28 +331,9 @@ function setupMotion() {
     const move = () => {
       frame = 0;
       if (!point) return;
-      const target = point.target instanceof Element ? point.target : document.body;
       follower.style.transform = `translate3d(${point.x}px, ${point.y}px, 0) translate(-50%, -50%)`;
       follower.classList.add("is-visible");
-      const hero = target.closest(".hero");
-      if (hero) {
-        const box = hero.getBoundingClientRect();
-        hero.style.setProperty("--hero-x", ((point.x - box.left) / box.width - .5) * 13 + "px");
-        hero.style.setProperty("--hero-y", ((point.y - box.top) / box.height - .5) * 10 + "px");
-      }
-      const card = target.closest(".product-card, .category-tile, .department-row");
-      if (activeCard && activeCard !== card) {
-        activeCard.classList.remove("motion-tilt");
-        activeCard.style.removeProperty("--tilt-x");
-        activeCard.style.removeProperty("--tilt-y");
-      }
-      activeCard = card;
-      if (card) {
-        const box = card.getBoundingClientRect();
-        card.style.setProperty("--tilt-x", (((point.y - box.top) / box.height) - .5) * -4 + "deg");
-        card.style.setProperty("--tilt-y", (((point.x - box.left) / box.width) - .5) * 4 + "deg");
-        card.classList.add("motion-tilt");
-      }
+      const target = point.target instanceof Element ? point.target : document.body;
       follower.classList.toggle("is-action", !!target.closest("a, button, input, select, textarea, label"));
     };
     document.addEventListener("pointermove", event => {
@@ -361,12 +343,10 @@ function setupMotion() {
     }, { passive: true });
     document.addEventListener("pointerleave", () => {
       follower.classList.remove("is-visible");
-      if (activeCard) activeCard.classList.remove("motion-tilt");
-      activeCard = null;
     });
   }
   document.addEventListener("pointerdown", event => {
-    if (event.button !== 0) return;
+    if (event.button !== 0 || event.pointerType !== "mouse" || !(event.target instanceof Element) || !event.target.closest("a, button")) return;
     const pulse = document.createElement("span");
     pulse.className = "click-pulse";
     pulse.style.left = event.clientX + "px";
@@ -375,16 +355,6 @@ function setupMotion() {
     document.body.append(pulse);
     pulse.addEventListener("animationend", () => pulse.remove(), { once: true });
   }, { passive: true });
-  document.addEventListener("click", event => {
-    if (!(event.target instanceof Element)) return;
-    const anchor = event.target.closest("a[href]");
-    if (!anchor || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || anchor.target || anchor.hasAttribute("download")) return;
-    const destination = new URL(anchor.href, location.href);
-    if (destination.origin !== location.origin || destination.href === location.href || destination.hash && destination.pathname === location.pathname) return;
-    event.preventDefault();
-    document.body.classList.add("page-leaving");
-    setTimeout(() => { location.href = destination.href; }, 170);
-  });
 }
 setupMotion();
 if (!document.querySelector('link[rel="manifest"]')) {

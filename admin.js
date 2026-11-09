@@ -4,6 +4,7 @@ const store = window.KhairatInventory;
 const supervisor = "ليان — مديرة الفرع";
 const viewTitles = { overview: "صباح الخير، ليان", inventory: "إدارة المخزون", counts: "طلبات العدّ", waste: "التوالف والفاقد", audit: "سجل التدقيق", admins: "مديرو الشركة" };
 let toastTimer;
+let modalReturnFocus;
 
 const escapeHtml = (value = "") => String(value).replace(/[&<>'"]/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" })[char]);
 const qty = (value) => Number(value).toLocaleString("ar-JO", { maximumFractionDigits: 2 });
@@ -31,7 +32,7 @@ function showView(name) {
   $("#pageTitle").textContent = viewTitles[name] || viewTitles.overview;
   document.title = `${viewTitles[name]} | إدارة خيرات الجنة`;
   if (location.hash !== `#${name}`) history.replaceState(null, "", `#${name}`);
-  window.scrollTo({ top: 0, behavior: "smooth" });
+  window.scrollTo({ top: 0, behavior: "auto" });
 }
 
 function itemCell(item) {
@@ -118,6 +119,7 @@ function populateSelects() {
 function renderAll() { renderMetrics(); renderOverview(); renderInventory(); renderApprovals(); renderAudit(); populateSelects(); }
 
 function openModal(id, itemId) {
+  modalReturnFocus = document.activeElement;
   const modal = $(id);
   if (itemId && id === "#countModal") $("#countItem").value = itemId;
   if (itemId && id === "#wasteModal") $("#wasteItem").value = itemId;
@@ -129,9 +131,12 @@ function openModal(id, itemId) {
 }
 
 function closeModals() {
+  const wasOpen = !!$(".admin-modal.is-open");
   $$(".admin-modal.is-open").forEach((modal) => { modal.classList.remove("is-open"); modal.setAttribute("aria-hidden", "true"); });
   $("#adminOverlay").hidden = true;
   document.body.classList.remove("modal-open");
+  if (wasOpen && modalReturnFocus?.isConnected) modalReturnFocus.focus();
+  modalReturnFocus = null;
 }
 
 function openPrice(itemId) {
@@ -180,7 +185,6 @@ $("#countForm").addEventListener("submit", (event) => {
   closeModals();
   store.submitCount(payload);
   event.target.reset(); renderAll(); showView("counts"); showToast("تم إرسال العدّ للمراجعة دون تعديل الكمية");
-  requestAnimationFrame(closeModals);
 });
 
 $("#wasteForm").addEventListener("submit", (event) => {
@@ -191,7 +195,6 @@ $("#wasteForm").addEventListener("submit", (event) => {
     closeModals();
     store.submitWaste(payload);
     event.target.reset(); renderAll(); showView("waste"); showToast("تم حجز التالف بانتظار اعتماد المدير");
-    requestAnimationFrame(closeModals);
   } catch (error) { showToast(error.message); }
 });
 
